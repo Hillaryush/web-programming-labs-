@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BookHub — Discover Timeless Classics & Bestsellers</title>
+<style>
+  :root{
+    --bg-0:#0a0e17; --bg-1:#0f1420;
+    --card:rgba(255,255,255,0.035); --card-border:rgba(255,255,255,0.08);
+    --text-0:#f3f5fa; --text-1:#aab1c4; --text-2:#6b7286;
+    --violet:#7c6bf0; --violet-2:#5a4bd6;
+    --pink:#ef5da8;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Segoe UI', system-ui, -apple-system, sans-serif;
+    background:
+      radial-gradient(1100px 500px at 15% -10%, rgba(124,107,240,0.14), transparent 60%),
+      var(--bg-0);
+    color:var(--text-0); min-height:100vh; padding-bottom:60px;
+  }
+  a{ color:inherit; text-decoration:none; }
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    max-width:1180px; margin:0 auto; padding:22px 24px 6px;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; font-size:20px; font-weight:800; }
+  .brand .logo{
+    width:34px; height:34px; border-radius:9px;
+    background:linear-gradient(135deg,var(--violet),var(--violet-2));
+    display:flex; align-items:center; justify-content:center; font-size:16px;
+  }
+  .back{ color:var(--text-1); font-size:13.5px; padding:8px 14px; border:1px solid var(--card-border); border-radius:9px; }
+  .back:hover{ color:var(--text-0); border-color:rgba(255,255,255,0.2); }
+  .icons{ display:flex; gap:12px; }
+  .icon-btn{
+    width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    background:var(--card); border:1px solid var(--card-border); font-size:16px; cursor:pointer;
+    position:relative;
+  }
+  .wish-count{
+    position:absolute; top:-4px; right:-4px; background:var(--pink); color:#fff;
+    font-size:10px; font-weight:700; border-radius:50%; width:16px; height:16px;
+    display:flex; align-items:center; justify-content:center;
+  }
+
+  .hero{
+    max-width:900px; margin:40px auto 30px; text-align:center; padding:0 24px;
+  }
+  .hero h1{ font-size:clamp(28px,4.5vw,42px); font-weight:800; letter-spacing:-0.02em; margin-bottom:16px;
+    background:linear-gradient(180deg,#fff,#c9cee0); -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero p{ color:var(--text-1); font-size:16px; line-height:1.6; }
+
+  .controls{ max-width:1180px; margin:0 auto; padding:0 24px; }
+  .search-box{
+    background:var(--card); border:1px solid var(--card-border); border-radius:14px;
+    padding:14px 18px; display:flex; align-items:center; gap:10px; margin-bottom:18px;
+  }
+  .search-box input{
+    flex:1; background:transparent; border:none; outline:none; color:var(--text-0); font-size:15px;
+  }
+  .search-box input::placeholder{ color:var(--text-2); }
+  .filters-row{ display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:8px; }
+  .chip{
+    padding:9px 16px; border-radius:20px; font-size:13.5px; font-weight:600;
+    background:var(--card); border:1px solid var(--card-border); color:var(--text-1); cursor:pointer;
+    transition:all .18s ease;
+  }
+  .chip.active{ background:linear-gradient(135deg,var(--violet),var(--violet-2)); color:#fff; border-color:transparent; }
+  .chip:hover:not(.active){ border-color:rgba(255,255,255,0.22); color:var(--text-0); }
+  .sort-wrap{ margin-left:auto; display:flex; align-items:center; gap:10px; color:var(--text-2); font-size:13.5px; }
+  select{
+    background:var(--bg-1); color:var(--text-0); border:1px solid var(--card-border);
+    border-radius:9px; padding:8px 12px; font-size:13.5px; outline:none;
+  }
+  .results-count{ color:var(--text-2); font-size:13px; margin:16px 0 18px; }
+
+  .book-grid{
+    max-width:1180px; margin:0 auto; padding:0 24px;
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:22px;
+  }
+  .book-card{
+    background:var(--card); border:1px solid var(--card-border); border-radius:16px; overflow:hidden;
+    display:flex; flex-direction:column; transition:transform .2s ease, border-color .2s ease;
+  }
+  .book-card:hover{ transform:translateY(-4px); border-color:rgba(255,255,255,0.18); }
+  .cover{
+    position:relative; height:190px; display:flex; align-items:center; justify-content:center;
+    padding:18px; text-align:center;
+  }
+  .cover .cat-badge{
+    position:absolute; top:12px; left:12px; font-size:10.5px; font-weight:700; letter-spacing:0.04em;
+    background:rgba(0,0,0,0.35); backdrop-filter:blur(4px); padding:4px 10px; border-radius:6px; color:#fff;
+  }
+  .cover .heart{
+    position:absolute; top:10px; right:10px; width:32px; height:32px; border-radius:50%;
+    background:rgba(0,0,0,0.35); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center;
+    cursor:pointer; font-size:15px; transition:transform .15s ease;
+  }
+  .cover .heart:hover{ transform:scale(1.12); }
+  .cover .heart.active{ background:var(--pink); }
+  .cover .cover-title{ font-weight:800; font-size:18px; color:#fff; line-height:1.3; text-shadow:0 2px 10px rgba(0,0,0,0.3); }
+  .cover .cover-emoji{ font-size:34px; margin-bottom:8px; display:block; }
+
+  .book-body{ padding:16px 18px 18px; display:flex; flex-direction:column; gap:6px; flex:1; }
+  .book-title{ font-size:15.5px; font-weight:700; line-height:1.3; }
+  .book-author{ font-size:13px; color:var(--text-2); margin-bottom:6px; }
+  .book-desc{ font-size:12.5px; color:var(--text-1); line-height:1.5; margin-bottom:10px; flex:1; }
+  .book-foot{ display:flex; align-items:center; justify-content:space-between; margin-top:auto; }
+  .rating{ font-size:12.5px; color:#f5c453; font-weight:600; }
+  .price{ font-size:16px; font-weight:800; color:var(--text-0); }
+
+  .empty{ text-align:center; padding:70px 20px; color:var(--text-2); grid-column:1/-1; }
+  .empty .e-icon{ font-size:40px; margin-bottom:12px; }
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand"><span class="logo">📖</span> BookHub</div>
+    <div class="icons">
+      <a class="back" href="index.html">← All Labs</a>
+      <div class="icon-btn" id="wishBtn">♥<span class="wish-count" id="wishCount" style="display:none;">0</span></div>
+    </div>
+  </div>
+
+  <div class="hero">
+    <h1>Discover Timeless Classics &amp; Bestsellers</h1>
+    <p>Explore curated book summaries, pricing, ratings, and reader picks to find your next great read.</p>
+  </div>
+
+  <div class="controls">
+    <div class="search-box">
+      🔍 <input id="searchInput" type="text" placeholder="Search by title, author, genre, or keyword...">
+    </div>
+    <div class="filters-row" id="chipRow"></div>
+    <div class="filters-row">
+      <div class="sort-wrap">
+        Sort by:
+        <select id="sortSelect">
+          <option value="featured">Featured</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="rating">Rating</option>
+          <option value="title">Title A–Z</option>
+        </select>
+      </div>
+    </div>
+    <div class="results-count" id="resultsCount"></div>
+  </div>
+
+  <div class="book-grid" id="bookGrid"></div>
+
+<script>
+const books = [
+  {id:1, title:"The Alchemist", author:"Paulo Coelho", genre:"Fiction", price:399, rating:4.7,
+   desc:"A shepherd's journey across the desert in search of a treasure and the meaning of his own dreams.",
+   emoji:"🏜️", gradient:"linear-gradient(135deg,#e07a3f,#f2a65a)"},
+  {id:2, title:"Wings of Fire", author:"A.P.J. Abdul Kalam", genre:"Autobiography", price:250, rating:4.8,
+   desc:"The inspiring life story of India's 'Missile Man', from a humble upbringing to the President's office.",
+   emoji:"🚀", gradient:"linear-gradient(135deg,#1f3a5f,#3a6ea5)"},
+  {id:3, title:"Rich Dad Poor Dad", author:"Robert Kiyosaki", genre:"Personal Finance", price:399, rating:4.6,
+   desc:"A perspective-shifting take on money, assets, and building financial independence early.",
+   emoji:"💰", gradient:"linear-gradient(135deg,#7b3fa0,#a35bc9)"},
+  {id:4, title:"Atomic Habits", author:"James Clear", genre:"Self-Help", price:499, rating:4.9,
+   desc:"A practical framework for building good habits and breaking bad ones, one tiny change at a time.",
+   emoji:"⚛️", gradient:"linear-gradient(135deg,#1f7a5c,#2fae86)"},
+  {id:5, title:"Sapiens", author:"Yuval Noah Harari", genre:"History", price:599, rating:4.7,
+   desc:"A sweeping look at how Homo sapiens came to dominate the planet, from myths to modern institutions.",
+   emoji:"🧬", gradient:"linear-gradient(135deg,#8a6d1f,#c9a227)"},
+  {id:6, title:"Thinking, Fast and Slow", author:"Daniel Kahneman", genre:"Psychology", price:550, rating:4.5,
+   desc:"An exploration of the two systems that drive the way we think, judge, and make decisions.",
+   emoji:"🧠", gradient:"linear-gradient(135deg,#4a3f8a,#7566c9)"},
+  {id:7, title:"Steve Jobs", author:"Walter Isaacson", genre:"Biography", price:650, rating:4.6,
+   desc:"The definitive biography of Apple's co-founder, drawn from candid interviews with those who knew him.",
+   emoji:"🍎", gradient:"linear-gradient(135deg,#333,#666)"},
+  {id:8, title:"The Power of Habit", author:"Charles Duhigg", genre:"Self-Help", price:450, rating:4.4,
+   desc:"Why habits exist and how they can be changed, backed by science and real-world case studies.",
+   emoji:"🔁", gradient:"linear-gradient(135deg,#1f7a5c,#3fae7a)"},
+  {id:9, title:"Ikigai", author:"Héctor García", genre:"Psychology", price:350, rating:4.5,
+   desc:"The Japanese secret to a long and happy life, exploring purpose, community, and daily ritual.",
+   emoji:"🌸", gradient:"linear-gradient(135deg,#c9556f,#e8879a)"},
+  {id:10, title:"Meditations", author:"Marcus Aurelius", genre:"History", price:299, rating:4.6,
+   desc:"Private reflections of a Roman emperor on duty, mortality, and living a disciplined life.",
+   emoji:"🏛️", gradient:"linear-gradient(135deg,#5a5a6b,#8f8fa3)"},
+  {id:11, title:"The Psychology of Money", author:"Morgan Housel", genre:"Personal Finance", price:399, rating:4.8,
+   desc:"Short stories on how people really think about wealth, greed, and happiness — not spreadsheets.",
+   emoji:"📈", gradient:"linear-gradient(135deg,#1f6b4a,#39a06f)"},
+  {id:12, title:"Long Walk to Freedom", author:"Nelson Mandela", genre:"Autobiography", price:499, rating:4.7,
+   desc:"Mandela's own account of his journey from rural childhood to leading South Africa's liberation.",
+   emoji:"✊", gradient:"linear-gradient(135deg,#2f5f3f,#4f8f5f)"},
+];
+
+const categories = ["All", "Fiction", "Autobiography", "Personal Finance", "Self-Help", "History", "Psychology", "Biography"];
+let activeCategory = "All";
+let wishlist = new Set();
+
+const chipRow = document.getElementById('chipRow');
+categories.forEach(cat=>{
+  const chip = document.createElement('div');
+  chip.className = 'chip' + (cat === 'All' ? ' active' : '');
+  chip.textContent = cat;
+  chip.onclick = ()=>{ activeCategory = cat; document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); chip.classList.add('active'); render(); };
+  chipRow.appendChild(chip);
+});
+
+const searchInput = document.getElementById('searchInput');
+const sortSelect = document.getElementById('sortSelect');
+searchInput.addEventListener('input', render);
+sortSelect.addEventListener('change', render);
+document.getElementById('wishBtn').addEventListener('click', ()=>{
+  activeCategory = "__WISHLIST__";
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  render();
+});
+
+function toggleWish(id, evt){
+  evt.stopPropagation();
+  if(wishlist.has(id)) wishlist.delete(id); else wishlist.add(id);
+  const wc = document.getElementById('wishCount');
+  wc.style.display = wishlist.size ? 'flex' : 'none';
+  wc.textContent = wishlist.size;
+  render();
+}
+
+function render(){
+  const q = searchInput.value.trim().toLowerCase();
+  let list = books.filter(b=>{
+    const matchesCat = activeCategory === 'All' || activeCategory === b.genre ||
+      (activeCategory === '__WISHLIST__' && wishlist.has(b.id));
+    const matchesSearch = !q || b.title.toLowerCase().includes(q) || b.author.toLowerCase().includes(q) || b.genre.toLowerCase().includes(q);
+    return matchesCat && matchesSearch;
+  });
+
+  switch(sortSelect.value){
+    case 'price-asc': list.sort((a,b)=>a.price-b.price); break;
+    case 'price-desc': list.sort((a,b)=>b.price-a.price); break;
+    case 'rating': list.sort((a,b)=>b.rating-a.rating); break;
+    case 'title': list.sort((a,b)=>a.title.localeCompare(b.title)); break;
+  }
+
+  document.getElementById('resultsCount').textContent =
+    activeCategory === '__WISHLIST__' ? `Showing ${list.length} wishlisted book${list.length===1?'':'s'}` :
+    `Showing ${list.length} book${list.length===1?'':'s'}`;
+
+  const grid = document.getElementById('bookGrid');
+  grid.innerHTML = '';
+  if(list.length === 0){
+    grid.innerHTML = `<div class="empty"><div class="e-icon">📭</div>No books match your search.</div>`;
+    return;
+  }
+  list.forEach(b=>{
+    const card = document.createElement('div');
+    card.className = 'book-card';
+    const isWished = wishlist.has(b.id);
+    card.innerHTML = `
+      <div class="cover" style="background:${b.gradient}">
+        <span class="cat-badge">${b.genre.toUpperCase()}</span>
+        <div class="heart ${isWished?'active':''}" onclick="toggleWish(${b.id}, event)">${isWished?'♥':'♡'}</div>
+        <div>
+          <span class="cover-emoji">${b.emoji}</span>
+          <div class="cover-title">${b.title}</div>
+        </div>
+      </div>
+      <div class="book-body">
+        <div class="book-title">${b.title}</div>
+        <div class="book-author">by ${b.author}</div>
+        <div class="book-desc">${b.desc}</div>
+        <div class="book-foot">
+          <span class="rating">★ ${b.rating}</span>
+          <span class="price">₹${b.price}</span>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+render();
+</script>
+</body>
+</html>

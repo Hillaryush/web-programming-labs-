@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Web Programming — Lab Projects</title>
+<style>
+  :root{
+    --bg-0:#0a0e17;
+    --bg-1:#0f1420;
+    --card:rgba(255,255,255,0.035);
+    --card-border:rgba(255,255,255,0.08);
+    --text-0:#f3f5fa;
+    --text-1:#aab1c4;
+    --text-2:#6b7286;
+    --violet:#7c6bf0;
+    --violet-2:#5a4bd6;
+    --blue:#4f7cf5;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Segoe UI', system-ui, -apple-system, sans-serif;
+    background:
+      radial-gradient(1100px 500px at 15% -10%, rgba(124,107,240,0.16), transparent 60%),
+      radial-gradient(900px 500px at 90% 0%, rgba(79,124,245,0.12), transparent 55%),
+      var(--bg-0);
+    color:var(--text-0);
+    min-height:100vh;
+  }
+  .wrap{max-width:1100px; margin:0 auto; padding:80px 24px 60px;}
+  .hero{text-align:center; margin-bottom:64px;}
+  .hero .icon{
+    font-size:52px; display:inline-block; margin-bottom:18px;
+    filter:drop-shadow(0 8px 24px rgba(124,107,240,0.35));
+  }
+  h1{
+    font-size:clamp(34px,5vw,52px);
+    font-weight:800;
+    letter-spacing:-0.02em;
+    background:linear-gradient(180deg,#ffffff, #c9cee0);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    margin-bottom:14px;
+  }
+  .subtitle{color:var(--text-1); font-size:17px; margin-bottom:6px;}
+  .tag{color:var(--text-2); font-size:14px; letter-spacing:0.03em;}
+  .grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:26px;
+    align-items:stretch;
+  }
+  .card{
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:20px;
+    padding:40px 32px;
+    text-align:center;
+    display:flex; flex-direction:column; align-items:center;
+    transition:transform .25s ease, border-color .25s ease, background .25s ease;
+    position:relative; overflow:hidden;
+  }
+  .card::before{
+    content:''; position:absolute; inset:0;
+    background:radial-gradient(400px 200px at 50% 0%, rgba(124,107,240,0.08), transparent 70%);
+    opacity:0; transition:opacity .3s ease;
+  }
+  .card:hover{ transform:translateY(-4px); border-color:rgba(255,255,255,0.16); }
+  .card:hover::before{ opacity:1; }
+  .card .emoji{font-size:44px; margin-bottom:18px;}
+  .card h2{font-size:24px; font-weight:700; margin-bottom:12px;}
+  .card p{color:var(--text-1); font-size:14.5px; line-height:1.6; margin-bottom:26px; max-width:320px;}
+  .btn{
+    display:inline-block; text-decoration:none;
+    padding:12px 26px; border-radius:10px; font-weight:600; font-size:14.5px;
+    color:#fff; transition:filter .2s ease, transform .2s ease;
+  }
+  .btn:hover{ filter:brightness(1.12); transform:translateY(-1px); }
+  .btn-blue{ background:linear-gradient(135deg,var(--blue),#3d63d6); box-shadow:0 8px 24px rgba(79,124,245,0.25); }
+  .btn-violet{ background:linear-gradient(135deg,var(--violet),var(--violet-2)); box-shadow:0 8px 24px rgba(124,107,240,0.25); }
+  .btn-cyan{ background:linear-gradient(135deg,#4fd3d3,#2fa8a8); box-shadow:0 8px 24px rgba(79,211,211,0.25); }
+  .badge{
+    position:absolute; top:20px; right:20px;
+    font-size:11px; font-weight:700; letter-spacing:0.06em;
+    color:var(--text-2); border:1px solid var(--card-border);
+    padding:4px 10px; border-radius:20px;
+  }
+  footer{ text-align:center; margin-top:70px; color:var(--text-2); font-size:13px; }
+  @media (max-width:680px){ .grid{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div class="icon">💻</div>
+      <h1>Web Programming</h1>
+      <p class="subtitle">Web Programming Lab Projects</p>
+      <p class="tag">B.Tech CSE · Software Engineering</p>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <span class="badge">LAB 01</span>
+        <div class="emoji">📚</div>
+        <h2>Lab 1 — BookHub</h2>
+        <p>A book information catalog with search, genre filters, sorting, and a wishlist for browsing curated titles.</p>
+        <a class="btn btn-blue" href="lab1.html">Open Lab 1</a>
+      </div>
+
+      <div class="card">
+        <span class="badge">LAB 02</span>
+        <div class="emoji">📦</div>
+        <h2>Lab 2 — Product Inventory Hub</h2>
+        <p>An interactive dashboard for tracking product stock, category value, and low-stock alerts, with full CRUD.</p>
+        <a class="btn btn-violet" href="lab2.html">Open Lab 2</a>
+      </div>
+
+      <div class="card">
+        <span class="badge">GAME</span>
+        <div class="emoji">🎮</div>
+        <h2>Tic Tac Toe</h2>
+        <p>A classic 3×3 game with player-vs-player and an unbeatable computer opponent, plus live score tracking.</p>
+        <a class="btn btn-cyan" href="tictactoe.html">Play Game</a>
+      </div>
+    </div>
+
+    <footer>© 2026 Web Programming Projects</footer>
+  </div>
+</body>
+</html>
